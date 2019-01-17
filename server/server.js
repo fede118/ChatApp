@@ -14,15 +14,19 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
 	console.log('New user connected');
 
-	socket.emit('newMessage', {
-		from: 'tyrion',
-		text: 'sup?',
-		createdAt: 1245
-	});
+	// socket.emit('newMessage', {
+	// 	from: 'tyrion',
+	// 	text: 'sup?',
+	// 	createdAt: 1245
+	// });
 
 	socket.on('createMessage', (msg) => {
-		msg['createdAt'] = new Date();
 		console.log('message recived: ', msg);
+		io.emit('newMessage', {
+			from: msg.from,
+			text: msg.text,
+			createdAt: new Date().getTime()
+		});
 	});
 
 	socket.on('disconnect', () => {
